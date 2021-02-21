@@ -1,0 +1,1296 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ch14 網路爬蟲 &#8212; SQLlite in python</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch08 操作資料庫" href="../DB_%E8%B3%87%E8%A8%8A%E8%A8%AD%E6%9C%83%E5%BF%85%E4%BF%AE%E7%9A%8412%E5%A0%82Python%E9%80%9A%E8%AD%98%E8%AA%B2_ch08/ch08%20%E6%93%8D%E4%BD%9C%E8%B3%87%E6%96%99%E5%BA%AB.html" />
+    <link rel="prev" title="Ch13 資料庫" href="ch13%20%E8%B3%87%E6%96%99%E5%BA%AB.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">SQLlite in python</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../content.html">
+   Content in Jupyter Book
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../markdown.html">
+     Markdown Files
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../notebooks.html">
+     Content with notebooks
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../DB_Python%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88_%E6%9D%BE%E5%B4%97_%E9%BB%83%E5%BB%BA%E5%BA%AD_ch13/ch13%20%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB.html">
+   Ch13 使用 sqlite3 模組管理 SQLite 資料庫
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ch13%20%E8%B3%87%E6%96%99%E5%BA%AB.html">
+   Ch13 資料庫
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Ch14 網路爬蟲
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../DB_%E8%B3%87%E8%A8%8A%E8%A8%AD%E6%9C%83%E5%BF%85%E4%BF%AE%E7%9A%8412%E5%A0%82Python%E9%80%9A%E8%AD%98%E8%AA%B2_ch08/ch08%20%E6%93%8D%E4%BD%9C%E8%B3%87%E6%96%99%E5%BA%AB.html">
+   Ch08 操作資料庫
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../DB_Python%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%AF%A6%E7%94%A8%E7%B6%93%E5%85%B8_%E6%9D%BE%E5%B4%97_%E8%A8%B1%E6%B8%85%E8%B3%A2/ch13%20Pyton%20%E5%85%A7%E5%B5%8C%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%20SQLite.html">
+   Ch13 Pyton 內嵌式資料庫 SQLite
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../references.html">
+   References
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/DB_Python全面攻略/Ch14 網路爬蟲.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDB_Python全面攻略/Ch14 網路爬蟲.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/DB_Python全面攻略/Ch14 網路爬蟲.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#htmlparse01-py">
+   htmlparse01.py
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#htmlparse02-py">
+   htmlparse02.py
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#htmlparse03-py">
+   htmlparse03.py
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#htmlparse04-py">
+   htmlparse04.py
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#htmlparse05-py">
+   htmlparse05.py
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#htmlparse06-py">
+   htmlparse06.py
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#htmlparse07-py">
+   htmlparse07.py
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="ch14">
+<h1>Ch14 網路爬蟲<a class="headerlink" href="#ch14" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="htmlparse01-py">
+<h2><a class="reference external" href="http://htmlparse01.py">htmlparse01.py</a><a class="headerlink" href="#htmlparse01-py" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load htmlparse01.py</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">urlstr</span> <span class="o">=</span> <span class="s2">&quot;http://www.drmaster.com.tw/Publish_Newbook.asp&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">urlstr</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;網址：</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;狀態：</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;表頭：</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>網址：http://www.drmaster.com.tw/Publish_Newbook.asp
+狀態：200
+表頭：{&#39;Cache-Control&#39;: &#39;private&#39;, &#39;Content-Type&#39;: &#39;text/html&#39;, &#39;Server&#39;: &#39;Microsoft-IIS/8.5&#39;, &#39;Set-Cookie&#39;: &#39;ASPSESSIONIDAABDRDSS=OBEDCPPAOMBOHNDAODGIPJNP; path=/&#39;, &#39;X-Powered-By&#39;: &#39;ASP.NET&#39;, &#39;Date&#39;: &#39;Sun, 21 Feb 2021 11:16:52 GMT&#39;, &#39;Content-Length&#39;: &#39;27768&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="htmlparse02-py">
+<h2><a class="reference external" href="http://htmlparse02.py">htmlparse02.py</a><a class="headerlink" href="#htmlparse02-py" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load htmlparse02.py</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">urlstr</span> <span class="o">=</span> <span class="s2">&quot;http://www.drmaster.com.tw/Publish_Newbook.asp&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">urlstr</span><span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;網頁程式碼：</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>網頁程式碼：
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;博碩文化股份有限公司&lt;/title&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+&lt;link href=&quot;drmaster.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+&lt;link href=&quot;pagination.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+&lt;!-- Global site tag (gtag.js) - Google Analytics --&gt;
+&lt;script async src=&quot;https://www.googletagmanager.com/gtag/js?id=UA-135628433-1&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag(&#39;js&#39;, new Date());
+
+  gtag(&#39;config&#39;, &#39;UA-135628433-1&#39;);
+&lt;/script&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;table width=&quot;1200&quot; border=&quot;0&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+  &lt;tr&gt;
+    &lt;td valign=&quot;top&quot;&gt;
+    
+	
+
+    &lt;table width=&quot;1200&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+      &lt;tr&gt;
+        &lt;td width=&quot;296&quot; height=&quot;70&quot;&gt;&lt;a href=&quot;/index.asp&quot;&gt;&lt;img src=&quot;images/index_01.jpg&quot; alt=&quot;回首頁&quot; width=&quot;296&quot; height=&quot;70&quot; border=&quot;0&quot;&gt;&lt;/a&gt;&lt;/td&gt;
+        &lt;td width=&quot;322&quot; background=&quot;images/index_02.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td&gt;
+        &lt;table width=&quot;582&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td height=&quot;35&quot; colspan=&quot;4&quot; align=&quot;right&quot;&gt;
+            
+            &lt;table width=&quot;450&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+            &lt;form id=&quot;form2&quot; name=&quot;form2&quot; method=&quot;POST&quot; action=&quot;/Publish_Newbook.asp&quot;&gt;
+              &lt;tr&gt;
+                &lt;td&gt;&lt;font size=&quot;2&quot;&gt;帳號&lt;/font&gt;
+                  &lt;label&gt;
+                  &lt;input name=&quot;account&quot; type=&quot;text&quot; id=&quot;account&quot; size=&quot;10&quot; /&gt;
+                &lt;/label&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;label&gt;&lt;font size=&quot;2&quot;&gt;密碼&lt;/font&gt;
+                    &lt;input name=&quot;password&quot; type=&quot;password&quot; id=&quot;password&quot; size=&quot;10&quot; /&gt;
+&lt;/label&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;div align=&quot;right&quot;&gt;
+                  &lt;input type=&quot;image&quot; name=&quot;imageField&quot; id=&quot;imageField&quot; src=&quot;images/Login.gif&quot; /&gt;
+                &lt;/div&gt;&lt;/td&gt;
+                &lt;td width=40&gt;&lt;div align=&quot;right&quot;&gt;&lt;font size=&quot;2&quot;&gt;&lt;a href=&quot;Register.asp&quot;&gt;註冊&lt;/a&gt;&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+                &lt;td width=60&gt;&lt;div align=&quot;right&quot;&gt;&lt;font size=&quot;2&quot;&gt;&lt;a href=&quot;ForgotPassword.asp&quot;&gt;忘記密碼&lt;/a&gt;&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+              &lt;/tr&gt;
+            &lt;/form&gt;
+            &lt;/table&gt;
+            
+            &lt;/td&gt;
+          &lt;/tr&gt;
+            &lt;form id=&quot;form1&quot; name=&quot;form1&quot; method=&quot;post&quot; action=&quot;Publish_Search.asp&quot;&gt;
+          &lt;tr&gt;
+            &lt;td width=&quot;290&quot; align=&quot;right&quot;&gt;&amp;nbsp;&lt;/td&gt;
+            &lt;td height=&quot;35&quot; align=&quot;right&quot;&gt;
+              &lt;select name=&quot;selectID&quot; id=&quot;selectID&quot;&gt;
+                &lt;option value=&quot;1&quot;&gt;書名&lt;/option&gt;
+                &lt;option value=&quot;2&quot;&gt;書號&lt;/option&gt;
+                &lt;option value=&quot;3&quot;&gt;作者&lt;/option&gt;
+                &lt;option value=&quot;4&quot;&gt;ISBN&lt;/option&gt;
+              &lt;/select&gt;            &lt;/td&gt;
+            &lt;td align=&quot;right&quot;&gt;&lt;input class=&quot;searchinptxt&quot; name=&quot;content&quot; type=&quot;text&quot; id=&quot;content&quot; size=&quot;20&quot; placeholder=&quot;請先選擇想搜尋的類型&quot; /&gt;&lt;/td&gt;
+            &lt;td align=&quot;right&quot;&gt;&lt;input type=&quot;image&quot; src=&quot;images/search_bnt.gif&quot; name=&quot;button&quot; id=&quot;button&quot; value=&quot;搜尋&quot; /&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;/form&gt;
+        &lt;/table&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+  &lt;td&gt;
+	&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&amp;&amp;i&lt;a.length&amp;&amp;(x=a[i])&amp;&amp;x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i&lt;a.length; i++)
+    if (a[i].indexOf(&quot;#&quot;)!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf(&quot;?&quot;))&gt;0&amp;&amp;parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&amp;&amp;d.all) x=d.all[n]; for (i=0;!x&amp;&amp;i&lt;d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&amp;&amp;d.layers&amp;&amp;i&lt;d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x &amp;&amp; d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i&lt;(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//--&gt;
+&lt;/script&gt;
+&lt;body onLoad=&quot;MM_preloadImages(&#39;images/TopMenu-Blue-01.jpg&#39;,&#39;images/TopMenu-Blue-02.jpg&#39;,&#39;images/TopMenu-Blue-03.jpg&#39;,&#39;images/TopMenu-Blue-05.jpg&#39;,&#39;images/TopMenu-Blue-08.jpg&#39;,&#39;images/TopMenu-Blue-09.jpg&#39;,&#39;images/TopMenu-Blue-10.jpg&#39;,&#39;images/TopMenu-Blue-11.jpg&#39;)&quot;&gt;  	
+&lt;table width=&quot;100%&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+&lt;tr&gt;
+        &lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;DrMaster_AboutDrMaster.asp&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image1&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-01.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-01.jpg&quot; alt=&quot;關於博碩&quot; name=&quot;Image1&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image1&quot; /&gt;&lt;/a&gt;&lt;/td&gt;
+    &lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;Publish_Newbook.asp&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image2&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-02.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-02.jpg&quot; alt=&quot;博碩好讀&quot; name=&quot;Image2&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image2&quot; /&gt;&lt;/a&gt;&lt;/td&gt;
+    &lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;School_Newbook.asp&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image3&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-03.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-03.jpg&quot; alt=&quot;校園圖書&quot; name=&quot;Image3&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image3&quot; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;!--    &lt;td&gt;&lt;a href=&quot;SchoolSoft_NewProduct.asp&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image4&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-04.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-04.jpg&quot; alt=&quot;校園軟體&quot; name=&quot;Image4&quot; width=&quot;117&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image4&quot; /&gt;&lt;/a&gt;&lt;/td&gt; --&gt;
+    &lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;MOCC_Aboutwhat.asp&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image5&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-05.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-05.jpg&quot; alt=&quot;MOCC認證&quot; name=&quot;Image5&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image5&quot; /&gt;&lt;/a&gt;&lt;/td&gt;
+    &lt;!--&lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;SSE_About.asp&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image11&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-11.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-11.jpg&quot; alt=&quot;SSE認證&quot; name=&quot;Image11&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image11&quot; /&gt;&lt;/a&gt;&lt;/td&gt;--&gt;
+    &lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;howtodownload.asp&quot; onMouseOver=&quot;MM_swapImage(&#39;Image10&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-10.jpg&#39;,1)&quot; onMouseOut=&quot;MM_swapImgRestore()&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-10.jpg&quot; alt=&quot;下載教學&quot; name=&quot;Image6&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image10&quot; /&gt;&lt;/a&gt;&lt;/td&gt;
+	&lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;https://www.drmaster.net/software/&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image8&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-08.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-08.jpg&quot; alt=&quot;博碩教育雲&quot; name=&quot;Image8&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image8&quot; /&gt;&lt;/a&gt;&lt;/td&gt;
+	&lt;td width=&quot;121&quot;&gt;&lt;a href=&quot;https://www.drmaster.net/edu/&quot; onMouseOut=&quot;MM_swapImgRestore()&quot; onMouseOver=&quot;MM_swapImage(&#39;Image9&#39;,&#39;&#39;,&#39;images/TopMenu-Blue-09.jpg&#39;,1)&quot;&gt;&lt;img src=&quot;images/TopMenu-Gray-09.jpg&quot; alt=&quot;數位學院&quot; name=&quot;Image9&quot; width=&quot;121&quot; height=&quot;49&quot; border=&quot;0&quot; id=&quot;Image9&quot; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;&lt;a href=&quot;http://www.drmaster.com.tw/download/DrMaster BooksList_New.xls&quot; &gt;&lt;font color = &quot;red&quot;&gt;最新書單(歡迎下載)&lt;/font&gt;&lt;/a&gt;&lt;/td&gt;  
+&lt;/tr&gt;
+&lt;/table&gt;
+    &lt;/td&gt;
+&lt;/tr&gt;
+    &lt;/table&gt;
+&lt;table width=&quot;100%&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+  &lt;tr&gt;
+    &lt;td height=&quot;10&quot; background=&quot;images/Gray_Line.jpg&quot;&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;BR&gt;
+&lt;table width=&quot;1200&quot; border=&quot;0&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+  &lt;tr&gt;
+    &lt;td width=&quot;230&quot; valign=&quot;top&quot;&gt;&lt;table width=&quot;178&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+  &lt;tr&gt;
+    &lt;td width=&quot;8&quot; height=&quot;8&quot; background=&quot;images/LeftMenu_01.gif&quot;&gt;&lt;/td&gt;
+    &lt;td width=&quot;162&quot; background=&quot;images/LeftMenu_02.gif&quot;&gt;&lt;/td&gt;
+    &lt;td width=&quot;8&quot; height=&quot;8&quot; background=&quot;images/LeftMenu_03.gif&quot;&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td height=&quot;51&quot; background=&quot;images/LeftMenu_04.gif&quot;&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src=&quot;images/LeftMenu_DrMasterGoodRead.gif&quot; width=&quot;162&quot; height=&quot;51&quot; alt=&quot;博碩好讀&quot; /&gt;&lt;/td&gt;
+    &lt;td background=&quot;images/LeftMenu_06.gif&quot;&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td background=&quot;images/LeftMenu_07.gif&quot;&gt;&lt;/td&gt;
+    &lt;td valign=&quot;top&quot;&gt;&lt;table width=&quot;100%&quot; border=&quot;0&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+
+      &lt;tr&gt;
+        &lt;td width=&quot;5&quot; height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;a href=&quot;Publish_Newbook.asp&quot;&gt;新書推薦&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;a href=&quot;Publish_Preview.asp&quot;&gt;出版預告&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;a href=&quot;Publish_Masterpiece.asp&quot;&gt;名家名著&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;a href=&quot;Publish_ithelpfans.asp&quot;&gt;iT達人祕笈&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+            
+          &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;p&gt;&lt;a href=&quot;Publish_Index.asp&quot;&gt;分類索引&lt;/a&gt;&lt;/p&gt;
+
+            
+          &lt;/td&gt;
+      &lt;/tr&gt;
+	&lt;tr&gt;
+        &lt;td height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+            
+          &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;p&gt;&lt;a href=&quot;Publish_AllBook.asp&quot;&gt;出版總覽&lt;/a&gt;&lt;/p&gt;
+
+            
+          &lt;/td&gt;
+      &lt;/tr&gt;
+	&lt;tr&gt;
+        &lt;td height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+            
+          &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;p&gt;&lt;a href=&quot;Publish_Service.asp&quot;&gt;讀者服務&lt;/a&gt;&lt;/p&gt;
+
+            
+          &lt;/td&gt;
+      &lt;/tr&gt;
+      
+      &lt;tr&gt;
+        &lt;td height=&quot;40&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td class=&#39;blueoff&#39; onmouseover=javascript:this.className=&#39;blueon01&#39; onmouseout=javascript:this.className=&#39;blueoff&#39; height=&quot;40&quot;&gt;&lt;a href=&quot;Publish_WantAuthor.asp&quot;&gt;徵求作者&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;&lt;/td&gt;
+    &lt;td background=&quot;images/LeftMenu_09.gif&quot;&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td height=&quot;14&quot; background=&quot;images/LeftMenu_10.gif&quot;&gt;&lt;/td&gt;
+    &lt;td background=&quot;images/LeftMenu_11.gif&quot;&gt;&lt;/td&gt;
+    &lt;td background=&quot;images/LeftMenu_12.gif&quot;&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/td&gt;
+    &lt;td width=&quot;970&quot;&gt;
+
+    &lt;div align=&quot;center&quot;&gt;&lt;/div&gt; 
+
+    &lt;table width=&quot;970&quot; height=&quot;200&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+      &lt;tr&gt;
+        &lt;td width=&quot;49&quot; height=&quot;90&quot; background=&quot;images/table01_01.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td width=&quot;857&quot; background=&quot;images/table01_02.jpg&quot;&gt;
+          &lt;table width=&quot;80%&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+            &lt;tr&gt;
+              &lt;td&gt;
+                &lt;a href=&quot;/index.asp&quot;&gt;首頁&lt;/a&gt; &amp;gt;&amp;gt; 博碩好讀 &gt;&gt; 新書推薦&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/table&gt;          &lt;/td&gt;
+        &lt;td width=&quot;64&quot; background=&quot;images/table01_03.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td background=&quot;images/table01_04.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td&gt;&lt;table width=&quot;100%&quot;&gt;
+          
+          &lt;tr align=&quot;center&quot; valign=&quot;top&quot;&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP32104&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP32104.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;Python程式設計實務-從入門到精通step by step&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP12101&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP12101.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;Scrum敏捷產品管理：打造客戶喜愛的產品&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22026&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22026.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;重新認識Vue.js：008天絕對看不完的Vue.js 3指南&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22110&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22110.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;一開始就學對 Android－Kotlin 與 MVVM 新架構&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+          &lt;/tr&gt;
+          
+          &lt;tr align=&quot;center&quot; valign=&quot;top&quot;&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22036&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22036.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;輕鬆學會Google TensorFlow 2人工智慧深度學習實作開發(第三版)&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22105&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22105.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;PHP網路爬蟲開發：入門到進階的爬蟲技術指南（iT邦幫忙鐵人賽系列書）&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP12033&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP12033.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;Kent Beck的測試驅動開發：案例導向的逐步解決之道&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP32017&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP32017.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;Python全面攻略：從程式新人到開發設計的快速學習&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+          &lt;/tr&gt;
+          
+          &lt;tr align=&quot;center&quot; valign=&quot;top&quot;&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MM32101&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MM32101.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;打造集客瘋潮的微電影行銷術：影音剪輯實戰×行動影音剪輯×特效處理×微電影實作×影音社群行銷 (暢銷回饋版)&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22108&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22108.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;APCS大學程式設計先修檢測：C語言超效解題致勝祕笈(暢銷回饋版)&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MM32001&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MM32001.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;PhotoShop影像處理設計&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MM32002&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MM32002.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;Illustrator向量圖形設計&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+          &lt;/tr&gt;
+          
+          &lt;tr align=&quot;center&quot; valign=&quot;top&quot;&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22028&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22028.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;C#程式設計從入門到專業(上)：完全剖析C#技術實務&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22029&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22029.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;C#程式設計從入門到專業(下)：職場C#進階應用技術&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP32022&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP32022.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;圖解資料結構－使用C++&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MI22005&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MI22005.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;視覺化社群行銷與SEO超級淘金術：使用Instagram與YouTube&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+          &lt;/tr&gt;
+          
+          &lt;tr align=&quot;center&quot; valign=&quot;top&quot;&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22040&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22040.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;LINE Bot by Python 全攻略：從Heroku到AWS跨平台實踐（iT邦幫忙鐵人賽系列書）&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MI22101&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MI22101.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;超強Google雲端應用：贏家必勝技能與行銷方程式(暢銷回饋版)&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP12019&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP12019.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;行動裝置深度學習&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+            &lt;td&gt;&lt;table width=&quot;160&quot; border=&quot;0&quot; cellspacing=&quot;10&quot;&gt;
+                  &lt;tr&gt;
+                      &lt;td &gt;&lt;a href=&quot;bookinfo.asp?BookID=MP22109&quot;&gt;&lt;img src=&quot;http://www.drmaster.com.tw/Cover/MP22109.png&quot; width=&quot;170&quot; height=&quot;230&quot; border=&quot;0&quot; &gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td class=&quot;style2&quot;&gt;圖說演算法：使用C語言(暢銷回饋版)&lt;/td&gt;
+                  &lt;/tr&gt;
+          
+                    &lt;/table&gt;&lt;/td&gt;
+            
+          &lt;/tr&gt;
+          
+        &lt;/table&gt;
+          &lt;p&gt;&amp;nbsp;&lt;/p&gt;
+                    &lt;div class=&quot;pagination scott&quot;&gt;
+            第一頁 | 上一頁 | &lt;A HREF=&quot;/Publish_Newbook.asp?offset=20&quot;&gt;下一頁&lt;/A&gt; | &lt;A HREF=&quot;/Publish_Newbook.asp?offset=-1&quot;&gt;最後一頁&lt;/A&gt;
+          &lt;/div&gt;&amp;nbsp;
+          &lt;/td&gt;
+        &lt;td background=&quot;images/table01_06.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td height=&quot;58&quot; background=&quot;images/table01_07.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td background=&quot;images/table01_08.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td background=&quot;images/table01_09.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;BR&gt;
+&lt;table width=&quot;1200&quot; border=&quot;0&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+  &lt;tr&gt;
+    &lt;td valign=&quot;top&quot;&gt;
+&lt;link href=&quot;SpryAssets/salescounter.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+&lt;table width=&quot;1200&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+  &lt;tr class=&quot;bg-gradiant&quot;&gt;
+    &lt;td colspan=&quot;3&quot;&gt;博碩文化客服信箱&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;3&quot; &gt;&amp;nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;3&quot; align=&quot;center&quot; class=&quot;title01&quot;&gt;
+    
+    &lt;p&gt;&lt;!--&lt;font size=&quot;+1&quot;&gt;&lt;a href=&quot;mailto:drservice@drmaster.com.tw&quot;&gt;DrService@drmaster.com.tw&lt;/a&gt;&lt;/font&gt;&lt;BR&gt;或&lt;BR&gt;--&gt;&lt;font size=&quot;+1&quot;&gt;&lt;a href=&quot;mailto:dr26962869@gmail.com&quot;&gt;dr26962869@gmail.com&lt;/a&gt;&lt;/font&gt;&lt;/p&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;3&quot; &gt;&amp;nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr class=&quot;bg-gradiant&quot;&gt;
+    &lt;td colspan=&quot;3&quot;&gt;文教業務團隊&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td width=&quot;500&quot;&gt;
+    &lt;table width=&quot;100%&quot; class=&quot;title01&quot;&gt;
+      &lt;tr&gt;
+        &lt;td colspan=&quot;2&quot;&gt;台北、新北、桃園、基隆、宜蘭、花蓮&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td width=&quot;50%&quot;&gt;&lt;font class=&quot;salesname&quot;&gt;郭 南 彤&lt;/font&gt; &lt;a href=&quot;images/contact/DrMaster_Tiger_LINE.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;images/contact/unnamed.png&quot; width=&quot;30&quot; height=&quot;30&quot; style=&quot;vertical-align:middle;&quot; /&gt;&lt;/a&gt;&lt;br&gt;LINE ID：&lt;a href=&quot;https://line.me/ti/p/VCASdTKWTx&quot;&gt;rgtech101&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;tel:+886-917727778&quot;&gt;0917-727778&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;mailto:tigerguo@drmaster.com.tw&quot;&gt;tigerguo@drmaster.com.tw&lt;/a&gt;&lt;/td&gt;
+        &lt;td width=&quot;50%&quot;&gt;&lt;font class=&quot;salesname&quot;&gt;汪 玉 鳳&lt;/font&gt; &lt;a href=&quot;images/contact/DrMaster_carlo_LINE.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;images/contact/unnamed.png&quot; width=&quot;30&quot; height=&quot;30&quot; style=&quot;vertical-align:middle;&quot; /&gt;&lt;/a&gt;&lt;br&gt;LINE ID：&lt;a href=&quot;https://line.me/ti/p/oHqpsUOj_s&quot;&gt;0925177716&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;tel:+886-925177716&quot;&gt;0925-177716&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;mailto:carlo@drmaster.com.tw&quot;&gt;carlo@drmaster.com.tw&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td colspan=&quot;2&quot;&gt;助理分機 519&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+    &lt;/td&gt;
+    &lt;td width=&quot;350&quot; class=&quot;title01&quot;&gt;新竹、苗栗、台中、彰化、南投、雲林&lt;br&gt;&lt;font class=&quot;salesname&quot;&gt;林 世 昌&lt;/font&gt; &lt;a href=&quot;images/contact/DrMaster_Rick_LINE.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;images/contact/unnamed.png&quot; width=&quot;30&quot; height=&quot;30&quot; style=&quot;vertical-align:middle;&quot; /&gt;&lt;/a&gt;&lt;br&gt;LINE ID：&lt;a href=&quot;https://line.me/ti/p/-5Fdr6JjYb&quot;&gt;0925275775&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;tel:+886-925275775&quot;&gt;0925-275775&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;mailto:rick@drmaster.com.tw&quot;&gt;rick@drmaster.com.tw&lt;/a&gt; &lt;br&gt;助理分機 519&lt;/td&gt;
+    &lt;td width=&quot;350&quot; class=&quot;title01&quot;&gt;嘉義、台南、高雄、屏東、台東&lt;br&gt;&lt;font class=&quot;salesname&quot;&gt;林 月 玲&lt;/font&gt; &lt;a href=&quot;images/contact/DrMaster_Dony_LINE.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;images/contact/unnamed.png&quot; width=&quot;30&quot; height=&quot;30&quot; style=&quot;vertical-align:middle;&quot; /&gt;&lt;/a&gt;&lt;br&gt;LINE ID：&lt;a href=&quot;https://line.me/ti/p/pduzOu-IrK&quot;&gt;0926858627&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;tel:+886-926858627&quot;&gt;0926-858627&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;mailto:donylin@drmaster.com.tw&quot;&gt;donylin@drmaster.com.tw&lt;/a&gt; &lt;br&gt;助理分機 238&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;3&quot; &gt;&amp;nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr class=&quot;bg-gradiant&quot;&gt;
+    &lt;td colspan=&quot;3&quot;&gt;MOCC 認證小組&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;3&quot; &gt;&amp;nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;3&quot; align=&quot;center&quot;&gt;
+    &lt;table width=&quot;70%&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+      &lt;!--&lt;tr class=&quot;title02&quot;&gt;
+        &lt;td width=&quot;5%&quot;&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td width=&quot;20%&quot;&gt;&lt;font class=&quot;salesname&quot;&gt;楊&amp;nbsp;朝&amp;nbsp;陽&lt;/font&gt;&lt;/td&gt;
+        &lt;td width=&quot;25%&quot;&gt;&lt;a href=&quot;images/contact/DrMaster_Gary_LINE.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;images/contact/unnamed.png&quot; width=&quot;30&quot; height=&quot;30&quot; style=&quot;vertical-align:middle;&quot; /&gt;&lt;/a&gt; ID：&lt;a href=&quot;https://line.me/ti/p/a_emYaxGlu&quot;&gt;0925166653&lt;/a&gt;&lt;/td&gt;
+        &lt;td width=&quot;20%&quot;&gt;&lt;a href=&quot;tel:+886-925166653&quot;&gt;0925-166653&lt;/a&gt;&lt;/td&gt;
+        &lt;td width=&quot;30%&quot;&gt;&lt;a href=&quot;mailto:gary@drmaster.com.tw&quot;&gt;gary@drmaster.com.tw&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;--&gt;
+      &lt;tr class=&quot;title02&quot;&gt;
+        &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td&gt;&lt;font class=&quot;salesname&quot;&gt;林&amp;nbsp;雯&amp;nbsp;玲&lt;/font&gt;&lt;/td&gt;
+        &lt;td&gt;電話：&lt;a href=&quot;tel:+886-226962869&quot;&gt;02-2696-2869&lt;/a&gt;&lt;/td&gt;
+        &lt;td&gt;分機：623&lt;/td&gt;
+        &lt;td&gt;&lt;a href=&quot;mailto:software24@drmaster.com.tw&quot;&gt;software24@drmaster.com.tw&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;link href=&quot;SpryAssets/bottom.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+&lt;table width=&quot;1200&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; bgcolor=&quot;#3e3a39&quot;&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td height=&quot;28&quot; colspan=&quot;3&quot; background=&quot;images/Line_3e3a39.jpg&quot;&gt;&amp;nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;3&quot; align=&quot;center&quot; class=&quot;style1&quot; &gt;
+    &lt;p&gt;&amp;nbsp;&lt;/p&gt;
+    &lt;p&gt;博碩文化股份有限公司 DrMaster Press Co., Ltd.&lt;br&gt;
+    台灣新北市汐止區新台五路一段112號10樓A棟&lt;br&gt;
+    Building A, 10F, No.112, Xintai 5th Rd., Sec.1,Xizhi Dist., New Taipei City 221, Taiwan&lt;br&gt;
+    Tel：02-2696-2869　Fax：02-2696-2867　劃撥帳號：17484299&lt;/p&gt;
+    &lt;p&gt;Copyright&amp;copy; DrMaster Press Co., Ltd. All Rights Reserved.&lt;/p&gt;
+    &lt;P&gt;&amp;nbsp;&lt;/P&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="htmlparse03-py">
+<h2><a class="reference external" href="http://htmlparse03.py">htmlparse03.py</a><a class="headerlink" href="#htmlparse03-py" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load htmlparse03.py</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="c1"># 指定圖片網址</span>
+<span class="n">imgUrl</span> <span class="o">=</span> <span class="s1">&#39;http://www.drmaster.com.tw/Cover/MP22030.png&#39;</span>
+<span class="n">imgName</span> <span class="o">=</span> <span class="n">imgUrl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">imgUrl</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">imgName</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>  <span class="c1"># 指定開啟檔案路徑</span>
+<span class="c1"># 將response.content二進位內容寫入為MP22030.png</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> 下載完畢&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">imgName</span><span class="p">))</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22030.png 下載完畢
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="htmlparse04-py">
+<h2><a class="reference external" href="http://htmlparse04.py">htmlparse04.py</a><a class="headerlink" href="#htmlparse04-py" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load htmlparse04.py</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="c1"># 博碩文化新書網頁</span>
+<span class="n">urlstr</span> <span class="o">=</span> <span class="s1">&#39;http://www.drmaster.com.tw/Publish_Newbook.asp&#39;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">urlstr</span><span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>  <span class="c1"># 顯示網頁title標題</span>
+<span class="n">listBookName</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;.style2&#39;</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">listBookName</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;共 </span><span class="si">%d</span><span class="s2"> 筆新書記錄&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">count</span><span class="p">))</span>  <span class="c1"># 顯示 &#39;共 20 筆新書記錄&#39;</span>
+
+<span class="c1"># 顯示網頁新書書名</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">listBookName</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">book</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>博碩文化股份有限公司
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>共 20 筆新書記錄
+Python程式設計實務-從入門到精通step by step
+Scrum敏捷產品管理：打造客戶喜愛的產品
+重新認識Vue.js：008天絕對看不完的Vue.js 3指南
+一開始就學對 Android－Kotlin 與 MVVM 新架構
+輕鬆學會Google TensorFlow 2人工智慧深度學習實作開發(第三版)
+PHP網路爬蟲開發：入門到進階的爬蟲技術指南（iT邦幫忙鐵人賽系列書）
+Kent Beck的測試驅動開發：案例導向的逐步解決之道
+Python全面攻略：從程式新人到開發設計的快速學習
+打造集客瘋潮的微電影行銷術：影音剪輯實戰×行動影音剪輯×特效處理×微電影實作×影音社群行銷 (暢銷回饋版)
+APCS大學程式設計先修檢測：C語言超效解題致勝祕笈(暢銷回饋版)
+PhotoShop影像處理設計
+Illustrator向量圖形設計
+C#程式設計從入門到專業(上)：完全剖析C#技術實務
+C#程式設計從入門到專業(下)：職場C#進階應用技術
+圖解資料結構－使用C++
+視覺化社群行銷與SEO超級淘金術：使用Instagram與YouTube
+LINE Bot by Python 全攻略：從Heroku到AWS跨平台實踐（iT邦幫忙鐵人賽系列書）
+超強Google雲端應用：贏家必勝技能與行銷方程式(暢銷回饋版)
+行動裝置深度學習
+圖說演算法：使用C語言(暢銷回饋版)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="htmlparse05-py">
+<h2><a class="reference external" href="http://htmlparse05.py">htmlparse05.py</a><a class="headerlink" href="#htmlparse05-py" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load htmlparse05.py</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">urlstr</span> <span class="o">=</span> <span class="s1">&#39;http://www.drmaster.com.tw/Publish_Newbook.asp&#39;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">urlstr</span><span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+
+<span class="n">listImageUrl</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;td a img&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">listImageUrl</span><span class="p">:</span>
+  <span class="c1">#if(&quot;http&quot; in link.get(&#39;src&#39;)):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>images/index_01.jpg
+images/TopMenu-Gray-01.jpg
+images/TopMenu-Gray-02.jpg
+images/TopMenu-Gray-03.jpg
+images/TopMenu-Gray-05.jpg
+images/TopMenu-Gray-10.jpg
+images/TopMenu-Gray-08.jpg
+images/TopMenu-Gray-09.jpg
+http://www.drmaster.com.tw/Cover/MP32104.png
+http://www.drmaster.com.tw/Cover/MP12101.png
+http://www.drmaster.com.tw/Cover/MP22026.png
+http://www.drmaster.com.tw/Cover/MP22110.png
+http://www.drmaster.com.tw/Cover/MP22036.png
+http://www.drmaster.com.tw/Cover/MP22105.png
+http://www.drmaster.com.tw/Cover/MP12033.png
+http://www.drmaster.com.tw/Cover/MP32017.png
+http://www.drmaster.com.tw/Cover/MM32101.png
+http://www.drmaster.com.tw/Cover/MP22108.png
+http://www.drmaster.com.tw/Cover/MM32001.png
+http://www.drmaster.com.tw/Cover/MM32002.png
+http://www.drmaster.com.tw/Cover/MP22028.png
+http://www.drmaster.com.tw/Cover/MP22029.png
+http://www.drmaster.com.tw/Cover/MP32022.png
+http://www.drmaster.com.tw/Cover/MI22005.png
+http://www.drmaster.com.tw/Cover/MP22040.png
+http://www.drmaster.com.tw/Cover/MI22101.png
+http://www.drmaster.com.tw/Cover/MP12019.png
+http://www.drmaster.com.tw/Cover/MP22109.png
+images/contact/unnamed.png
+images/contact/unnamed.png
+images/contact/unnamed.png
+images/contact/unnamed.png
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="htmlparse06-py">
+<h2><a class="reference external" href="http://htmlparse06.py">htmlparse06.py</a><a class="headerlink" href="#htmlparse06-py" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load htmlparse06.py</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="c1"># 若程式的路徑有images資料即刪除，否則即建立images</span>
+<span class="n">folder</span> <span class="o">=</span> <span class="s2">&quot;images&quot;</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+  <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+<span class="n">urlstr</span> <span class="o">=</span> <span class="s1">&#39;http://www.drmaster.com.tw/Publish_Newbook.asp&#39;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">urlstr</span><span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+<span class="n">listImageUrl</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;td a img&#39;</span><span class="p">)</span>
+<span class="c1"># 逐一取得博碩新書圖檔並放入images資料夾下</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">listImageUrl</span><span class="p">:</span>
+  <span class="n">imgUrl</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;http&quot;</span> <span class="ow">in</span> <span class="n">imgUrl</span><span class="p">):</span>
+    <span class="n">imgName</span> <span class="o">=</span> <span class="n">imgUrl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">imgUrl</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">imgName</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>  <span class="c1"># 指定開啟檔案路徑</span>
+    <span class="c1"># 將response.content二進位內容寫入指定的圖檔名稱</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> 下載完成&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">imgName</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;共下載 </span><span class="si">%d</span><span class="s1"> 張圖檔&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP32104.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP12101.png 下載完成
+MP22026.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22110.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22036.png 下載完成
+MP22105.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP12033.png 下載完成
+MP32017.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MM32101.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22108.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MM32001.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MM32002.png 下載完成
+MP22028.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22029.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP32022.png 下載完成
+MI22005.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22040.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MI22101.png 下載完成
+MP12019.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22109.png 下載完成
+共下載 20 張圖檔
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="htmlparse07-py">
+<h2><a class="reference external" href="http://htmlparse07.py">htmlparse07.py</a><a class="headerlink" href="#htmlparse07-py" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load htmlparse07.py</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="c1"># 若程式的路徑有images資料即刪除，否則即建立images</span>
+<span class="n">folder</span> <span class="o">=</span> <span class="s2">&quot;images&quot;</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+  <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+<span class="n">pageName</span> <span class="o">=</span> <span class="s1">&#39;newbook.html&#39;</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pageName</span><span class="p">):</span>
+  <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pageName</span><span class="p">)</span>
+
+<span class="n">urlstr</span> <span class="o">=</span> <span class="s1">&#39;http://www.drmaster.com.tw/Publish_Newbook.asp&#39;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">urlstr</span><span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+<span class="n">listImageUrl</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;td a img&#39;</span><span class="p">)</span>
+<span class="n">listImageUrlOk</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">listBookName</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;.style2&#39;</span><span class="p">)</span>
+<span class="c1"># 逐一取得博碩新書圖檔並放入images資料夾下</span>
+<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">listImageUrl</span><span class="p">:</span>
+  <span class="n">imgUrl</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;http&quot;</span> <span class="ow">in</span> <span class="n">imgUrl</span><span class="p">):</span>
+    <span class="n">imgName</span> <span class="o">=</span> <span class="n">imgUrl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">listImageUrlOk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imgName</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">imgUrl</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">imgName</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>  <span class="c1"># 指定開啟檔案路徑</span>
+    <span class="c1"># 將response.content二進位內容寫入指定的圖檔名稱</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> 下載完成&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">imgName</span><span class="p">))</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pageName</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;html&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;meta charset=&quot;utf-8&quot;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;body&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;table border&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;tr&gt;&lt;td&gt;書號&lt;/td&gt;&lt;td&gt;圖&lt;/td&gt;&lt;td&gt;書名&lt;/td&gt;&lt;/tr&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listBookName</span><span class="p">)):</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;tr&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;td&gt;</span><span class="si">%s</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">listImageUrlOk</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;td&gt;&lt;img src=&quot;images/</span><span class="si">%s</span><span class="s1">&quot; width=&quot;100&quot;&gt;&lt;/td&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">listImageUrlOk</span><span class="p">[</span><span class="n">n</span><span class="p">]))</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;td&gt;</span><span class="si">%s</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">listBookName</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/tr&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/table&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/body&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/html&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">pageName</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> 網頁建置成功&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pageName</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP32104.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP12101.png 下載完成
+MP22026.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22110.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22036.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22105.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP12033.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP32017.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MM32101.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22108.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MM32001.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MM32002.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22028.png 下載完成
+MP22029.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP32022.png 下載完成
+MI22005.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MP22040.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MI22101.png 下載完成
+MP12019.png 下載完成
+MP22109.png 下載完成
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>newbook.html 網頁建置成功
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./DB_Python全面攻略"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="ch13%20%E8%B3%87%E6%96%99%E5%BA%AB.html" title="previous page">Ch13 資料庫</a>
+    <a class='right-next' id="next-link" href="../DB_%E8%B3%87%E8%A8%8A%E8%A8%AD%E6%9C%83%E5%BF%85%E4%BF%AE%E7%9A%8412%E5%A0%82Python%E9%80%9A%E8%AD%98%E8%AA%B2_ch08/ch08%20%E6%93%8D%E4%BD%9C%E8%B3%87%E6%96%99%E5%BA%AB.html" title="next page">Ch08 操作資料庫</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The Jupyter Book Community<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
