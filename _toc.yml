@@ -7,7 +7,8 @@
     - file: markdown
     - file: notebooks
 - file: DB_Python程式設計_松崗_黃建庭_ch13/ch13 關聯式資料庫
-- file: DB_Python全面攻略_ch13/ch13 資料庫
+- file: DB_Python全面攻略/ch13 資料庫
+- file: DB_Python全面攻略/Ch14 網路爬蟲
 - file: DB_資訊設會必修的12堂Python通識課_ch08/ch08 操作資料庫
 - file: DB_Python程式設計實用經典_松崗_許清賢/ch13 Pyton 內嵌式資料庫 SQLite
 - file: references.md
