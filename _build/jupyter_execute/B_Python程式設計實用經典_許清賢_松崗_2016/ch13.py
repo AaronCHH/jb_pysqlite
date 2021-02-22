@@ -1,7 +1,5 @@
 # Ch13 Pyton 內嵌式資料庫 SQLite
 
-{cite}`Python程式設計實用經典_2016`
-
 # %load sqlite_creatDB_Table.py
 # filename:sqlite_CreateDB_Table.py
 # function: Python program using Sqlite

@@ -6,9 +6,9 @@
   sections:
     - file: markdown
     - file: notebooks
-- file: B_Python 程式設計從入門到進階應用_黃建庭_松崗_2016
+- file: B_Python程式設計從入門到進階應用_黃建庭_松崗_2016
   sections:
-    - file: B_Python 程式設計從入門到進階應用_黃建庭_松崗_2016/ch13
+    - file: B_Python程式設計從入門到進階應用_黃建庭_松崗_2016/ch13
 - file: B_Python全面攻略_資訊種子研究室_博碩_2021
   sections:
     - file: B_Python全面攻略_資訊種子研究室_博碩_2021/ch13

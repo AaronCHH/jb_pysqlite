@@ -1,7 +1,5 @@
 # Ch13 資料庫
 
-{cite}`Python全面攻略_2021`
-
 # %load E13_2_connect.py
 import sqlite3                          # 匯入sqlite3套件
 

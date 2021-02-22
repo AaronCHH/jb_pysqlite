@@ -1,7 +1,5 @@
 # Ch08 操作資料庫
 
-{cite}`資訊設會必修的12堂Python通識課_2019`
-
 #顯示學生成績表
 import sqlite3
 dbfile = "school.db"
