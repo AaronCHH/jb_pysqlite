@@ -6,9 +6,16 @@
   sections:
     - file: markdown
     - file: notebooks
-- file: DB_Python程式設計_松崗_黃建庭_ch13/ch13 關聯式資料庫
-- file: DB_Python全面攻略/ch13 資料庫
-- file: DB_Python全面攻略/Ch14 網路爬蟲
-- file: DB_資訊設會必修的12堂Python通識課_ch08/ch08 操作資料庫
-- file: DB_Python程式設計實用經典_松崗_許清賢/ch13 Pyton 內嵌式資料庫 SQLite
+- file: B_Python 程式設計從入門到進階應用_黃建庭_松崗_2016
+  sections:
+    - file: B_Python 程式設計從入門到進階應用_黃建庭_松崗_2016/ch13
+- file: B_Python全面攻略_資訊種子研究室_博碩_2021
+  sections:
+    - file: B_Python全面攻略_資訊種子研究室_博碩_2021/ch13
+- file: B_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019
+  sections:
+    - file: B_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019/ch08
+- file: B_Python程式設計實用經典_許清賢_松崗_2016
+  sections:
+    - file: B_Python程式設計實用經典_許清賢_松崗_2016/ch13
 - file: references.md
