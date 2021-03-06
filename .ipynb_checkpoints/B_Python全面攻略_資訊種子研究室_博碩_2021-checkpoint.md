@@ -1,5 +1,6 @@
 # Python全面攻略(資訊種子研究室 博碩 2021)
-## TOC
+
+
 ```
 Ch01 認識Python程式語言
 Ch02 資料型別與基本輸出入函式
@@ -17,5 +18,7 @@ Ch14 網路爬蟲
 Ch15 JSON資料存取
 Ch16 Azure電腦視覺服務
 ```
-## Links
-* [博碩](http://www.drmaster.com.tw/bookinfo.asp?BookID=MP32017)
+
+```python
+
+```
