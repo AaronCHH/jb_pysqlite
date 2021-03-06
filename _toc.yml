@@ -1,14 +1,27 @@
 # Table of content
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
-- file: intro
-- file: content
+# - file: intro
+# - file: content
+#   sections:
+#     - file: markdown
+#     - file: notebooks
+# - file: DB_Python程式設計_松崗_黃建庭_ch13/ch13 關聯式資料庫
+# - file: DB_Python全面攻略/ch13 資料庫
+# - file: DB_Python全面攻略/Ch14 網路爬蟲
+# - file: DB_資訊設會必修的12堂Python通識課_ch08/ch08 操作資料庫
+# - file: DB_Python程式設計實用經典_松崗_許清賢/ch13 Pyton 內嵌式資料庫 SQLite
+# - file: references.md
+
+- file: DB_Python全面攻略_資訊種子研究室_博碩_2021
   sections:
-    - file: markdown
-    - file: notebooks
-- file: DB_Python程式設計_松崗_黃建庭_ch13/ch13 關聯式資料庫
-- file: DB_Python全面攻略/ch13 資料庫
-- file: DB_Python全面攻略/Ch14 網路爬蟲
-- file: DB_資訊設會必修的12堂Python通識課_ch08/ch08 操作資料庫
-- file: DB_Python程式設計實用經典_松崗_許清賢/ch13 Pyton 內嵌式資料庫 SQLite
-- file: references.md
+    - file: DB_Python全面攻略_資訊種子研究室_博碩_2021/ch13_資料庫
+- file: DB_Python程式設計_黃建庭_松崗_2016
+  sections:
+    - file: DB_Python程式設計_黃建庭_松崗_2016/ch13_關聯式資料庫
+- file: DB_Python程式設計實用經典_許清賢_松崗_2016
+  sections:
+    - file: DB_Python程式設計實用經典_許清賢_松崗_2016/ch13_Pyton內嵌式資料庫SQLite
+- file: DB_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019
+  sections:
+    - file: DB_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019/ch08_操作資料庫
