@@ -1,4 +1,4 @@
-# Table of content
+﻿# Table of content
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
 # - file: intro
@@ -12,7 +12,6 @@
 # - file: DB_資訊設會必修的12堂Python通識課_ch08/ch08 操作資料庫
 # - file: DB_Python程式設計實用經典_松崗_許清賢/ch13 Pyton 內嵌式資料庫 SQLite
 # - file: references.md
-
 - file: B_Python全面攻略_資訊種子研究室_博碩_2021
   sections:
     - file: B_Python全面攻略_資訊種子研究室_博碩_2021/ch13
