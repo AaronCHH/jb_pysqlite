@@ -13,16 +13,16 @@
 # - file: DB_Python程式設計實用經典_松崗_許清賢/ch13 Pyton 內嵌式資料庫 SQLite
 # - file: references.md
 
-- file: DB_Python全面攻略_資訊種子研究室_博碩_2021
+- file: B_Python全面攻略_資訊種子研究室_博碩_2021
   sections:
-    - file: DB_Python全面攻略_資訊種子研究室_博碩_2021/ch13_資料庫
-- file: DB_Python程式設計_黃建庭_松崗_2016
+    - file: B_Python全面攻略_資訊種子研究室_博碩_2021/ch13
+- file: B_Python程式設計從入門到進階應用_黃建庭_松崗_2016
   sections:
-    - file: DB_Python程式設計_黃建庭_松崗_2016/ch13_關聯式資料庫
-- file: DB_Python程式設計實用經典_許清賢_松崗_2016
+    - file: B_Python程式設計從入門到進階應用_黃建庭_松崗_2016/ch13
+- file: B_Python程式設計實用經典_許清賢_松崗_2016
   sections:
-    - file: DB_Python程式設計實用經典_許清賢_松崗_2016/ch13_Pyton內嵌式資料庫SQLite
-- file: DB_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019
+    - file: B_Python程式設計實用經典_許清賢_松崗_2016/ch13
+- file: B_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019
   sections:
-    - file: DB_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019/ch08_操作資料庫
+    - file: B_資訊設會必修的12堂Python通識課_何敏煌_博碩_2019/ch08
 
