@@ -1,0 +1,1018 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ch13 Pyton 內嵌式資料庫 SQLite &#8212; SQLlite in python</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../references.html" />
+    <link rel="prev" title="Python程式設計實用經典 (許清賢 松崗 2016)" href="../B_Python%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%AF%A6%E7%94%A8%E7%B6%93%E5%85%B8_%E8%A8%B1%E6%B8%85%E8%B3%A2_%E6%9D%BE%E5%B4%97_2016.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">SQLlite in python</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../content.html">
+   Content in Jupyter Book
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../markdown.html">
+     Markdown Files
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../notebooks.html">
+     Content with notebooks
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../B_Python%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%BE%9E%E5%85%A5%E9%96%80%E5%88%B0%E9%80%B2%E9%9A%8E%E6%87%89%E7%94%A8_%E9%BB%83%E5%BB%BA%E5%BA%AD_%E6%9D%BE%E5%B4%97_2016.html">
+   Python 程式設計從入門到進階應用(黃建庭 松崗 2016)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../B_Python%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%BE%9E%E5%85%A5%E9%96%80%E5%88%B0%E9%80%B2%E9%9A%8E%E6%87%89%E7%94%A8_%E9%BB%83%E5%BB%BA%E5%BA%AD_%E6%9D%BE%E5%B4%97_2016/ch13.html">
+     Ch13 使用 sqlite3 模組管理 SQLite 資料庫
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../B_Python%E5%85%A8%E9%9D%A2%E6%94%BB%E7%95%A5_%E8%B3%87%E8%A8%8A%E7%A8%AE%E5%AD%90%E7%A0%94%E7%A9%B6%E5%AE%A4_%E5%8D%9A%E7%A2%A9_2021.html">
+   Python全面攻略
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../B_Python%E5%85%A8%E9%9D%A2%E6%94%BB%E7%95%A5_%E8%B3%87%E8%A8%8A%E7%A8%AE%E5%AD%90%E7%A0%94%E7%A9%B6%E5%AE%A4_%E5%8D%9A%E7%A2%A9_2021/ch13.html">
+     Ch13 資料庫
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../B_%E8%B3%87%E8%A8%8A%E8%A8%AD%E6%9C%83%E5%BF%85%E4%BF%AE%E7%9A%8412%E5%A0%82Python%E9%80%9A%E8%AD%98%E8%AA%B2_%E4%BD%95%E6%95%8F%E7%85%8C_%E5%8D%9A%E7%A2%A9_2019.html">
+   資訊設會必修的12堂Python通識課(何敏煌 博碩 2019)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../B_%E8%B3%87%E8%A8%8A%E8%A8%AD%E6%9C%83%E5%BF%85%E4%BF%AE%E7%9A%8412%E5%A0%82Python%E9%80%9A%E8%AD%98%E8%AA%B2_%E4%BD%95%E6%95%8F%E7%85%8C_%E5%8D%9A%E7%A2%A9_2019/ch08.html">
+     Ch08 操作資料庫
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="../B_Python%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%AF%A6%E7%94%A8%E7%B6%93%E5%85%B8_%E8%A8%B1%E6%B8%85%E8%B3%A2_%E6%9D%BE%E5%B4%97_2016.html">
+   Python程式設計實用經典 (許清賢 松崗 2016)
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Ch13 Pyton 內嵌式資料庫 SQLite
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../references.html">
+   References
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/B_Python程式設計實用經典_許清賢_松崗_2016/ch13.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FB_Python程式設計實用經典_許清賢_松崗_2016/ch13.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/B_Python程式設計實用經典_許清賢_松崗_2016/ch13.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="ch13-pyton-sqlite">
+<h1>Ch13 Pyton 內嵌式資料庫 SQLite<a class="headerlink" href="#ch13-pyton-sqlite" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load sqlite_creatDB_Table.py</span>
+<span class="c1"># filename:sqlite_CreateDB_Table.py</span>
+<span class="c1"># function: Python program using Sqlite</span>
+<span class="c1"># Step1: Create user DB name using Sqlite3.connect(&quot;DB name)</span>
+<span class="c1"># step2: Create Table using CREATE TABLE Table_name</span>
+<span class="c1"># step3: insert Data value using INSERT INTO invest VALUES</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="n">conndb</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;chap13_DB.db&#39;</span><span class="p">)</span>
+<span class="n">curr</span> <span class="o">=</span> <span class="n">conndb</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+<span class="c1"># Create table using CREATE TABLE Table_name</span>
+<span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+  <span class="s2">&quot;CREATE TABLE invest(date text, trans text, Company text, qty int, price real)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Insert a row of data</span>
+<span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO invest VALUES (&#39;2016-03-01&#39;,&#39;BUY&#39;,&#39;Mediatek&#39;,10,120)&quot;</span><span class="p">)</span>
+
+<span class="c1"># commit the changes, it means save the data</span>
+<span class="n">conndb</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;select * from invest&#39;</span><span class="p">)</span>
+<span class="n">data_fromDB</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_fromDB</span><span class="p">)</span>
+
+<span class="c1"># inserts many records at a time</span>
+<span class="n">buy_sell</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;2016-03-28&#39;</span><span class="p">,</span> <span class="s1">&#39;BUY&#39;</span><span class="p">,</span> <span class="s1">&#39;Mediatek&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">123.00</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;2016-05-02&#39;</span><span class="p">,</span> <span class="s1">&#39;BUY&#39;</span><span class="p">,</span> <span class="s1">&#39;TSMC&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">120.00</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;2006-05-12&#39;</span><span class="p">,</span> <span class="s1">&#39;SELL&#39;</span><span class="p">,</span> <span class="s1">&#39;Mediatek&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">125.00</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;2006-05-13&#39;</span><span class="p">,</span> <span class="s1">&#39;SELL&#39;</span><span class="p">,</span> <span class="s1">&#39;TSMC&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">125.00</span><span class="p">),</span>
+            <span class="p">]</span>
+<span class="n">curr</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s1">&#39;INSERT INTO invest VALUES (?,?,?,?,?)&#39;</span><span class="p">,</span> <span class="n">buy_sell</span><span class="p">)</span>
+<span class="n">conndb</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># fetch the data from DB&#39;s table</span>
+<span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;select * from invest&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># close the connection .</span>
+<span class="n">curr</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">conndb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load sqlite_retrive.py</span>
+<span class="c1"># filename:Sqlite_retrive.py</span>
+<span class="c1"># function: retrive row data</span>
+<span class="c1"># The original table is created by using the following statement</span>
+<span class="c1">#curr.execute(&quot;CREATE TABLE invest(date text, trans text, Company text, qty int, price real)&quot;)</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span> <span class="k">as</span> <span class="nn">DB</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="n">connDB</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;chap13_db.db&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">connDB</span><span class="p">:</span>
+  <span class="n">cur</span> <span class="o">=</span> <span class="n">connDB</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM invest&quot;</span><span class="p">)</span>
+
+  <span class="n">rows</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The Data from invest table are as follows:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; date          trans  Company    qty  price&quot;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================&quot;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM invest WHERE Company= &#39;TSMC&#39;  AND trans= &#39;BUY&#39; &quot;</span><span class="p">)</span>
+
+  <span class="n">BUY_amount</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">amount</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">BUY_records</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The Data from invest for TSMC BUY are as follows:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">BUY_records</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<span class="c1">#   cur.execute(&quot;SELECT sum(qty*price) AS &#39;Total monthly salary&#39; FROM invest&quot;)</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;row amount=&quot;</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+    <span class="n">BUY_amount</span> <span class="o">+=</span> <span class="n">amount</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BUY_amount=&quot;</span><span class="p">,</span> <span class="n">BUY_amount</span><span class="p">)</span>
+
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM invest WHERE Company= &#39;TSMC&#39;  AND trans= &#39;SELL&#39; &quot;</span><span class="p">)</span>
+
+  <span class="n">SELL_amount</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">amount</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">SELL_records</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The Data from invest for TSMC SELL  are as follows:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">SELL_records</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;row amount=&quot;</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+    <span class="n">SELL_amount</span> <span class="o">+=</span> <span class="n">amount</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SELL_amount=&quot;</span><span class="p">,</span> <span class="n">SELL_amount</span><span class="p">)</span>
+
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; The invest result=&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">SELL_amount</span><span class="o">-</span><span class="n">BUY_amount</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot; NTD&quot;</span><span class="p">)</span>
+
+<span class="c1"># close the connection .</span>
+<span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">connDB</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load sqlite_create_insert_only.py</span>
+<span class="c1"># filename:sqlite_Create_insert_only.py</span>
+<span class="c1"># function: create Database name and Table and insrt values</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span> <span class="k">as</span> <span class="nn">DBlite</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">DBlite</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;D:/BOOK/CHAP14/CHAP13_TEST.DB&quot;</span><span class="p">)</span>
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;drop table if exists books&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># create a table</span>
+<span class="c1"># cursor.execute(&quot;&quot;&quot;CREATE TABLE albums</span>
+<span class="c1">#                  (title text, artist text, release_date text,</span>
+<span class="c1">#                   publisher text, media_type text)</span>
+<span class="c1">#               &quot;&quot;&quot;)</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE books</span>
+<span class="s2">                  (book_id  text, title text, author text, release_date text, </span>
+<span class="s2">                   book_company text, category_type text) </span>
+<span class="s2">               &quot;&quot;&quot;</span><span class="p">)</span>
+<span class="c1"># insert some data</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+  <span class="s2">&quot;INSERT INTO books VALUES (&#39;0-13-020272-x&#39;,&#39;Unix Network programming&#39;, &#39;Steven &#39;, &#39;10/12/2000&#39;, &#39;Osliiy&#39;, &#39;Network&#39;)&quot;</span><span class="p">)</span>
+
+<span class="c1"># commit, means to save data to database</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># insert multiple records, using the more secure &quot;?&quot; method</span>
+<span class="c1"># cursorname.execitemany</span>
+<span class="n">BOOKS_data</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;1-878739-02-6&#39;</span><span class="p">,</span> <span class="s1">&#39;c++ primer&#39;</span><span class="p">,</span> <span class="s1">&#39;Stephen&#39;</span><span class="p">,</span> <span class="s1">&#39;12/8/2000&#39;</span><span class="p">,</span> <span class="s1">&#39;Waite Group&#39;</span><span class="p">,</span> <span class="s1">&#39;Language&#39;</span><span class="p">),</span>
+              <span class="p">(</span><span class="s1">&#39;0-13-2017-1&#39;</span><span class="p">,</span> <span class="s1">&#39;The design of the UNix OS&#39;</span><span class="p">,</span> <span class="s1">&#39;J.Bach&#39;</span><span class="p">,</span> <span class="s1">&#39;3/2/2002&#39;</span><span class="p">,</span> <span class="s1">&#39;Prentice&#39;</span><span class="p">,</span> <span class="s1">&#39;OS&#39;</span><span class="p">)]</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO books VALUES (?,?,?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">BOOKS_data</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM books ORDER BY category_type&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="n">embedded_sql_alter</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">ALTER TABLE books ADD price int</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">embedded_sql_alter</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after ALTER :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM books ORDER BY category_type&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="n">embedded_sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">UPDATE books SET author = &#39;Maurice J.Bach&#39; WHERE author = &#39;J.Bach&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">embedded_sql</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after UPDATE :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM books ORDER BY category_type&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; DELETE FROM books WHERE author = &#39;Stephen&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after DELETE FROM TABLE:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM books ORDER BY category_type&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load sqlite_datatype.py</span>
+<span class="c1"># filename:sqlite_Datatype.py</span>
+<span class="c1"># function: show the data type</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="n">sql_create_cusomer_table</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS customer (</span>
+<span class="s2">  Customer_id  INT  PRIMARY KEY  DEFAULT 1101,</span>
+<span class="s2">  Cust_Name VARCHAR(10) NOT NULL DEFAULT &quot;APPLE&quot;,</span>
+<span class="s2">  Credit int  NOT NULL DEFAULT 10000,</span>
+<span class="s2">  Phone   VARCHAR(10) NULL</span>
+<span class="s2">);</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">db_file</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP14/CHAP13_TEST.DB&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_file</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">)</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_create_cusomer_table</span><span class="p">)</span>
+
+<span class="n">customer_data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1102</span><span class="p">,</span> <span class="s2">&quot;APPLE&quot;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;212-3312456&quot;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">1101</span><span class="p">,</span> <span class="s2">&quot;IBM&quot;</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">1103</span><span class="p">,</span> <span class="s2">&quot;Google&quot;</span><span class="p">,</span> <span class="mi">30000</span><span class="p">,</span> <span class="s2">&quot;716-3222222&quot;</span><span class="p">)]</span>
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO customer VALUES (?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">customer_data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM customer ORDER BY Customer_id&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load sqlite_DML.py</span>
+<span class="c1"># filename:sqlite_DML.py</span>
+<span class="c1"># function: select Row data</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span> <span class="k">as</span> <span class="nn">DBlite</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">DBlite</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;D:/BOOK/CHAP14/CHAP13_TEST.DB&quot;</span><span class="p">)</span>
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;DROP TABLE if exists books&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE books</span>
+<span class="s2">                  (book_id  text, title text, author text, release_date text, </span>
+<span class="s2">                   book_company text, category_type text) </span>
+<span class="s2">               &quot;&quot;&quot;</span><span class="p">)</span>
+<span class="c1"># insert data</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+  <span class="s2">&quot;INSERT INTO books VALUES (&#39;0-13-020272-x&#39;,&#39;Unix Network programming&#39;, &#39;Steven &#39;, &#39;10/12/2000&#39;, &#39;Osliiy&#39;, &#39;Network&#39;)&quot;</span><span class="p">)</span>
+<span class="c1"># save data to database</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># insert multiple records(row) using cursorname.execitemany</span>
+<span class="n">BOOKS_data</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;1-878739-02-6&#39;</span><span class="p">,</span> <span class="s1">&#39;c++ primer&#39;</span><span class="p">,</span> <span class="s1">&#39;Stephen&#39;</span><span class="p">,</span> <span class="s1">&#39;12/8/2000&#39;</span><span class="p">,</span> <span class="s1">&#39;Waite Group&#39;</span><span class="p">,</span> <span class="s1">&#39;Language&#39;</span><span class="p">),</span>
+              <span class="p">(</span><span class="s1">&#39;0-13-2017-1&#39;</span><span class="p">,</span> <span class="s1">&#39;The design of the UNix OS&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;J.Bach&#39;</span><span class="p">,</span> <span class="s1">&#39;3/2/2002&#39;</span><span class="p">,</span> <span class="s1">&#39;Prentice&#39;</span><span class="p">,</span> <span class="s1">&#39;OS&#39;</span><span class="p">),</span>
+              <span class="p">(</span><span class="s1">&#39;0-13-2016-1&#39;</span><span class="p">,</span> <span class="s1">&#39;The Python programming&#39;</span><span class="p">,</span> <span class="s1">&#39;S.HSU&#39;</span><span class="p">,</span> <span class="s1">&#39;3/2/2016&#39;</span><span class="p">,</span> <span class="s1">&#39;songkung&#39;</span><span class="p">,</span> <span class="s1">&#39;language&#39;</span><span class="p">)]</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO books VALUES (?,?,?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">BOOKS_data</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM books ORDER BY category_type&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Results from a LIKE query:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">select_sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">SELECT * FROM books </span>
+<span class="s2">WHERE title LIKE &#39;%python%&#39; &quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">select_sql</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">DELETE author is J.Bach:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">delete_sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;DELETE FROM  books where author=&quot;J.Bach&quot;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">delete_sql</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM books ORDER BY category_type&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load primary_key.py</span>
+<span class="c1">#filename: primary_key.py</span>
+<span class="c1"># function: create table using primay key and select two table such as orders and customers</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+
+
+<span class="c1"># create a Database</span>
+<span class="k">def</span> <span class="nf">db_connect</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;conn=&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">conn</span>
+  <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;connection DB is ok&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">create_table</span><span class="p">):</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">create_table</span><span class="p">)</span>
+  <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">NONE</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create TABLE OK&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span>
+  <span class="k">finally</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finally&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+  <span class="n">dbfile</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP14/CHAP13_TEST.DB&quot;</span>
+
+  <span class="n">sql_create_customers_table</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; CREATE TABLE IF NOT EXISTS customers (</span>
+<span class="s2">                                        id         integer PRIMARY KEY,</span>
+<span class="s2">                                        name       text NOT NULL,</span>
+<span class="s2">                                        begin_date text,</span>
+<span class="s2">                                        credit     integer NOT NULL</span>
+<span class="s2">                                    ); &quot;&quot;&quot;</span>
+
+  <span class="n">sql_create_orders_table</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS orders (</span>
+<span class="s2">                                    id            integer PRIMARY KEY,</span>
+<span class="s2">                                    name          text NOT NULL,</span>
+<span class="s2">                                    quantity      integer,</span>
+<span class="s2">                                    product       integer NOT NULL,</span>
+<span class="s2">                                    price         integer NOT NULL,</span>
+<span class="s2">                                    ship_date     text NOT NULL,</span>
+<span class="s2">                                    FOREIGN KEY   (id) REFERENCES customers (id)</span>
+<span class="s2">                                );&quot;&quot;&quot;</span>
+
+  <span class="c1"># create a database connection</span>
+  <span class="n">conn</span> <span class="o">=</span> <span class="n">db_connect</span><span class="p">(</span><span class="n">dbfile</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">create_table</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">sql_create_customers_table</span><span class="p">)</span>
+    <span class="n">create_table</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">sql_create_orders_table</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CANNOT  create the database connection.&quot;</span><span class="p">)</span>
+
+<span class="c1">#    insert_values, don&#39;t let the primary key id duplicate , it is PRIMARY KEY</span>
+  <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="c1">#    c.execute(&quot; DROP TABLE customers&quot;)</span>
+  <span class="n">customers_data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1176</span><span class="p">,</span> <span class="s1">&#39;APPLE&#39;</span><span class="p">,</span> <span class="s1">&#39;12/8/2000&#39;</span><span class="p">,</span> <span class="mi">120000</span><span class="p">),</span>
+                    <span class="p">(</span><span class="mi">1178</span><span class="p">,</span> <span class="s1">&#39;IBM&#39;</span><span class="p">,</span> <span class="s1">&#39;12/12/2005&#39;</span><span class="p">,</span> <span class="mi">240000</span><span class="p">)]</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO customers VALUES (?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">customers_data</span><span class="p">)</span>
+  <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT customers:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM customers ORDER BY id&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+  <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="c1">#    c.execute(&quot; DROP TABLE orders&quot;)</span>
+  <span class="n">orders_data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1176</span><span class="p">,</span> <span class="s1">&#39;APPLE&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;AVL car L1&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;12/05/2016&#39;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">1178</span><span class="p">,</span> <span class="s1">&#39;IBM&#39;</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="s2">&quot;AVL car L2&quot;</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="s1">&#39;12/06/2015&#39;</span><span class="p">)]</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO orders VALUES (?,?,?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">orders_data</span><span class="p">)</span>
+  <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT orders:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM orders ORDER BY id&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after SELECT:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM orders WHERE EXISTS(SELECT * FROM customers WHERE customers.id=orders.id)&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+  <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load dbformat.py</span>
+<span class="c1">#fielname: dbformat.py</span>
+<span class="c1"># function: sqlite3 insert data and commit using the format style</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">sqlite_file</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP14/CHAP13_CUST.DB&quot;</span>
+<span class="n">table_name</span> <span class="o">=</span> <span class="s1">&#39;customers&#39;</span>
+<span class="n">id_column</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+<span class="n">name_column</span> <span class="o">=</span> <span class="s1">&#39;cust_name&#39;</span>
+
+<span class="c1"># Connecting to the database file</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sqlite_file</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+<span class="c1">#c.execute(&quot;DROP TABLE IF EXISTS customers&quot;)</span>
+<span class="c1">#c.execute(&quot;CREATE TABLE customers (Id INTEGER PRIMARY KEY , cust_name TEXT)&quot;)</span>
+
+<span class="c1"># Inserts customer ID</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO </span><span class="si">{tn}</span><span class="s2"> (</span><span class="si">{idf}</span><span class="s2">, </span><span class="si">{cn}</span><span class="s2">) VALUES (1101, &#39;APPLE&#39;)&quot;</span><span class="o">.</span>
+            <span class="nb">format</span><span class="p">(</span><span class="n">tn</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">idf</span><span class="o">=</span><span class="n">id_column</span><span class="p">,</span> <span class="n">cn</span><span class="o">=</span><span class="n">name_column</span><span class="p">))</span>
+  <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;**** ID exists ERROR  since it is PRIMARY KEY  </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_column</span><span class="p">))</span>
+<span class="c1">#    sys.exit(1)</span>
+<span class="c1">#    if conn:</span>
+<span class="c1">#        conn.rollback()</span>
+<span class="c1">#    print (&quot;Error %s:&quot; % err.args[0])</span>
+<span class="c1">#    sys.exit(1)</span>
+
+
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sucessful&quot;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM customers&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="c1"># insert an customer ID if the ID not exist</span>
+
+<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT OR IGNORE INTO </span><span class="si">{tn}</span><span class="s2"> (</span><span class="si">{idf}</span><span class="s2">, </span><span class="si">{cn}</span><span class="s2">) VALUES (1102, &#39;APPLE&#39;)&quot;</span><span class="o">.</span>
+          <span class="nb">format</span><span class="p">(</span><span class="n">tn</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">idf</span><span class="o">=</span><span class="n">id_column</span><span class="p">,</span> <span class="n">cn</span><span class="o">=</span><span class="n">name_column</span><span class="p">))</span>
+
+<span class="c1"># Updates the  inserted or existing row record&#39;s cust_name</span>
+<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE </span><span class="si">{tn}</span><span class="s2"> SET </span><span class="si">{cn}</span><span class="s2">=(&#39;IBM&#39;) WHERE </span><span class="si">{idf}</span><span class="s2">=(1101)&quot;</span><span class="o">.</span>
+          <span class="nb">format</span><span class="p">(</span><span class="n">tn</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">cn</span><span class="o">=</span><span class="n">name_column</span><span class="p">,</span> <span class="n">idf</span><span class="o">=</span><span class="n">id_column</span><span class="p">))</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT and Update :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM customers&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load rollback.py</span>
+<span class="c1">#fielname: rollback.py</span>
+<span class="c1"># function: rollback after commit</span>
+<span class="c1">#          it will not rollback if no commit</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">sqlite_file</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP14/CUST.DB&quot;</span>
+<span class="n">table_name</span> <span class="o">=</span> <span class="s1">&#39;customers&#39;</span>
+<span class="n">id_column</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+<span class="n">name_column</span> <span class="o">=</span> <span class="s1">&#39;cust_name&#39;</span>
+
+<span class="c1"># Connecting to the database file</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sqlite_file</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS customers&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE customers (Id INTEGER PRIMARY KEY , cust_name TEXT,dating TEXT, credit INTEGER NOT NULL)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Inserts customer ID</span>
+<span class="k">try</span><span class="p">:</span>
+
+  <span class="c1">#   c.execute(&quot;BEGIN&quot;)</span>
+  <span class="n">customers_data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1170</span><span class="p">,</span> <span class="s1">&#39;APPLE&#39;</span><span class="p">,</span> <span class="s1">&#39;12/8/2000&#39;</span><span class="p">,</span> <span class="mi">120000</span><span class="p">),</span>
+                    <span class="p">(</span><span class="mi">1172</span><span class="p">,</span> <span class="s1">&#39;IBM&#39;</span><span class="p">,</span> <span class="s1">&#39;12/12/2005&#39;</span><span class="p">,</span> <span class="mi">240000</span><span class="p">)]</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO customers VALUES (?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">customers_data</span><span class="p">)</span>
+<span class="c1">#   c.commit()</span>
+
+<span class="k">except</span><span class="p">:</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ROLLBACK&quot;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error ROLLBACK&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT and Update :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM customers&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ROLLBACK&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT and Update :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM customers&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load app_cars.py</span>
+<span class="c1">#filename: App_cars.py</span>
+<span class="c1"># function: use the SQLite in the application for car database</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span> <span class="k">as</span> <span class="nn">lite</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">dbfile</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP14/CUST.DB&quot;</span>
+
+<span class="n">con</span> <span class="o">=</span> <span class="n">lite</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbfile</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">con</span><span class="p">:</span>
+
+  <span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS cars&quot;</span><span class="p">)</span>
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="s2">&quot;CREATE TABLE cars(Id INT PRIMARY KEY, Name TEXT, MODEL TEXT DEFAULT &#39;normal&#39; ,year INT)&quot;</span><span class="p">)</span>
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO cars VALUES(1100,&#39;BMW&#39;, &#39;BMW X5&#39;,1965)&quot;</span><span class="p">)</span>
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO cars VALUES(1101,&#39;HYYDAI&#39;,&#39;NORMAL&#39;,1965)&quot;</span><span class="p">)</span>
+
+  <span class="n">cars_data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1105</span><span class="p">,</span> <span class="s1">&#39;AUDI&#39;</span><span class="p">,</span> <span class="s1">&#39;A6&#39;</span><span class="p">,</span> <span class="mi">1965</span><span class="p">),</span>
+               <span class="p">(</span><span class="mi">1102</span><span class="p">,</span> <span class="s1">&#39;Mercedes&#39;</span><span class="p">,</span> <span class="s1">&#39;S3&#39;</span><span class="p">,</span> <span class="mi">2001</span><span class="p">),</span>
+               <span class="p">(</span><span class="mi">1107</span><span class="p">,</span> <span class="s1">&#39;TOYOTA&#39;</span><span class="p">,</span> <span class="s1">&#39;Camery&#39;</span><span class="p">,</span> <span class="mi">2010</span><span class="p">)</span>
+               <span class="p">]</span>
+  <span class="n">cur</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO cars VALUES (?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">cars_data</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM cars ORDER BY Name&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after SELECT:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM cars WHERE Name = &#39;AUDI&#39;&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+
+<span class="n">con</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load sqlite_ver.py</span>
+<span class="c1"># filename:sqlite_ver.py</span>
+<span class="c1"># function: to check the sqlite version</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">con</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">dbfile</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP14/CHAP13_CUST.DB&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;dbfile.db&#39;</span><span class="p">)</span>
+  <span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+  <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT SQLITE_VERSION()&#39;</span><span class="p">)</span>
+  <span class="n">ver</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SQLite3 version is as follows: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ver</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error </span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+  <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SQLite3 version is as follows: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ver</span><span class="p">)</span>
+
+<span class="k">finally</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">con</span><span class="p">:</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load employee_count.py</span>
+
+<span class="c1"># filename:employee_count.py</span>
+<span class="c1"># function: create database and create table, insert value to table</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="n">dbfile</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP13/employee.DB&quot;</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbfile</span><span class="p">)</span>
+
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+<span class="c1"># delete the table first</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;DROP TABLE employee;&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">sql_CREATE_TABLE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">CREATE TABLE employee ( </span>
+<span class="s2">emp_id INTEGER PRIMARY KEY, first VARCHAR(10), last VARCHAR(8), </span>
+<span class="s2">sex CHAR(1), hire DATE,birth DATE,salary int);</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_CREATE_TABLE</span><span class="p">)</span>
+
+<span class="n">sql_INSERT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;INSERT INTO employee (emp_id, first, last, sex, hire,birth,salary)</span>
+<span class="s2">    VALUES (1999, &quot;Steven&quot;, &quot;Bush&quot;, &quot;M&quot;,&quot;2000-01-26&quot;, &quot;1966-12-25&quot;,5000);&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_INSERT</span><span class="p">)</span>
+
+<span class="n">sql_INSERT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;INSERT INTO employee (emp_id, first, last, sex, hire,birth,salary)</span>
+<span class="s2">    VALUES (1990, &quot;John&quot;, &quot;Hu&quot;, &quot;M&quot;,&quot;2006-05-26&quot;, &quot;1990-1-25&quot;,5500);&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_INSERT</span><span class="p">)</span>
+
+<span class="n">sql_INSERT_command</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;INSERT INTO employee (emp_id, first, last, sex, hire,birth,salary)</span>
+<span class="s2">    VALUES (2000, &quot;Ted&quot;, &quot;HSU&quot;, &quot;M&quot;,&quot;1980-01-26&quot;, &quot;1963-10-25&quot;,4000);&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_INSERT_command</span><span class="p">)</span>
+
+
+<span class="c1"># use commit() when you want to save the changes</span>
+<span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+  <span class="s2">&quot;SELECT COUNT(*) from employee where salary &gt;4000 AND first=&#39;John&#39;&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="n">number_of_rows</span><span class="p">,)</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;count=&quot;</span><span class="p">,</span> <span class="n">number_of_rows</span><span class="p">)</span>
+
+
+<span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load exam13-2.py</span>
+<span class="c1"># filename:chap13_ex1_create_table</span>
+<span class="c1"># function:check why the sytax is wrong</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+
+<span class="c1">#-------------------------db creation ---------------------------------------#</span>
+<span class="n">dbconn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;/my_db.db&#39;</span><span class="p">)</span>
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">dbconn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS EMPLOYEE&quot;</span><span class="p">)</span>
+<span class="n">dbconn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;CREATE TABLE EMPLOYEE</span>
+<span class="s1">       (ID INT PRIMARY KEY     NOT NULL,</span>
+<span class="s1">       NAME           TEXT    NOT NULL,</span>
+<span class="s1">       AGE            INT     NOT NULL,</span>
+<span class="s1">       ADDRESS        CHAR(50),</span>
+<span class="s1">       SALARY         REAL);&#39;&#39;&#39;</span><span class="p">)</span>
+
+
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS IOT_table&quot;</span><span class="p">)</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;CREATE TABLE IOT_table (</span>
+<span class="s2">        name        TEXT DEFAULT NULL,</span>
+<span class="s2">        temperature INT,</span>
+<span class="s2">        location    CHAR(50),</span>
+<span class="s2">        );&quot;&quot;&quot;</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+
+<span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;CREATE INDEX index_iot_table ON IOT_table(name);&quot;</span><span class="p">)</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %load exam13-3.py</span>
+<span class="c1"># filename:sqlite_Datatype.py</span>
+<span class="c1"># function: show the data type</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="n">sql_create_cusomer_table</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS customer (</span>
+<span class="s2">  Customer_id  INT  PRIMARY KEY  DEFAULT 1101,</span>
+<span class="s2">  Cust_Name VARCHAR(10) NOT NULL DEFAULT &quot;APPLE&quot;,</span>
+<span class="s2">  Credit int  NOT NULL DEFAULT 10000,</span>
+<span class="s2">  Phone   VARCHAR(10) NULL</span>
+<span class="s2">);</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">db_file</span> <span class="o">=</span> <span class="s2">&quot;D:/BOOK/CHAP14/CHAP13_TEST.DB&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_file</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">)</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_create_cusomer_table</span><span class="p">)</span>
+
+<span class="n">customer_data</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1102</span><span class="p">,</span> <span class="s2">&quot;APPLE&quot;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;212-3312456&quot;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">1101</span><span class="p">,</span> <span class="s2">&quot;IBM&quot;</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">1102</span><span class="p">,</span> <span class="s2">&quot;Google&quot;</span><span class="p">,</span> <span class="mi">30000</span><span class="p">,</span> <span class="s2">&quot;716-3222222&quot;</span><span class="p">)]</span>
+<span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO customer VALUES (?,?,?,?)&quot;</span><span class="p">,</span> <span class="n">customer_data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">List all the records in the table after INSERT :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_record</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT rowid, * FROM customer ORDER BY Customer_id&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">row_record</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./B_Python程式設計實用經典_許清賢_松崗_2016"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../B_Python%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%AF%A6%E7%94%A8%E7%B6%93%E5%85%B8_%E8%A8%B1%E6%B8%85%E8%B3%A2_%E6%9D%BE%E5%B4%97_2016.html" title="previous page">Python程式設計實用經典 (許清賢 松崗 2016)</a>
+    <a class='right-next' id="next-link" href="../references.html" title="next page">References</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The Jupyter Book Community<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
